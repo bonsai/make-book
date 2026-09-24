@@ -1,0 +1,80 @@
+name: merchandise-plan
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_format:
+        description: "持ち込む完成素材"
+        required: true
+        type: choice
+        options: [txt, md, pdf, epub]
+      pages:
+        description: "ページ数"
+        required: true
+        default: "200"
+        type: string
+      supply:
+        description: "供給方式"
+        required: true
+        default: "auto"
+        type: choice
+        options: [auto, ondemand, offline, digital]
+      quantity:
+        description: "必要冊数"
+        required: true
+        default: "1"
+        type: string
+      channels:
+        description: "候補チャネル"
+        required: true
+        default: "all"
+        type: choice
+        options: [all, kindle, kdp-paperback, note, booth, base, offline]
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "source=${{ inputs.source_format }}"
+          echo "pages=${{ inputs.pages }}"
+          echo "quantity=${{ inputs.quantity }}"
+          echo "supply=${{ inputs.supply }}
+
+  ondemand:
+    needs: inspect
+    if: ${{ inputs.supply == 'auto' || inputs.supply == 'ondemand' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Plan 1-copy on-demand
+        if: ${{ inputs.quantity == '1' }}
+        run: echo "Plan: 200-page / 1-copy on-demand branch"
+      - name: Plan small-lot on-demand
+        if: ${{ inputs.quantity != '1' }}
+        run: echo "Plan: on-demand / small-lot branch"
+
+  offline:
+    needs: inspect
+    if: ${{ inputs.supply == 'auto' || inputs.supply == 'offline' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Plan: offline / physical stock branch"
+
+  digital:
+    needs: inspect
+    if: ${{ inputs.supply == 'auto' || inputs.supply == 'digital' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Plan: digital distribution branch"
+
+  channel_plan:
+    needs: [ondemand, offline, digital]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Channel plan"
+          echo "format=${{ inputs.source_format }}"
+          echo "pages=${{ inputs.pages }}"
+          echo "channels=${{ inputs.channels }}"
+          echo "supply=${{ inputs.supply }}
