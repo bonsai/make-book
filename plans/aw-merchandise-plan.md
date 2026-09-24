@@ -42,3 +42,21 @@ channel: kdp
 status: plan
 
 ここから実売データを蓄積し、**1冊 → 10冊 → 100冊**へ計画を拡張する。
+
+## 1000円自伝：コスト最適化ケース
+
+目的：200Pの自伝を、販売価格1,000円（税込）を目標に、1冊から成立させる。
+
+- Decision: 判型 / 白黒・カラー / POD / 電子版 / 販売チャネル / 作業量
+- Constraint: 200P、初回1冊、在庫ゼロ、本文は別repoで完成済み
+- Objective: 金銭コスト + 作業コスト + 在庫リスクを最小化しつつ商品成立
+- Baseline: Amazon.co.jp KDP paperback。黒インク標準判200Pなら印刷費は公式式で 206円 + 200×2円 = 606円。実際の設定時にKDP計算ツールで確認する。
+- Price branch: 1,000円はKDP日本の紙書籍で60%ロイヤリティ区分の境界。税抜価格・実際の設定条件をAWで確認する。
+- OR branches: `POD_1copy`, `digital_first`, `POD_plus_digital`, `offline_small_lot`
+- Output: plan.yaml と比較表を生成し、次のIssueへ渡す。
+
+### 最小ケース
+
+`200P / 1冊 / 1,000円 / 黒白POD / 在庫ゼロ`
+
+ここをベースラインにして、電子版追加・価格変更・冊数増加の各ケースをAWで再計算する。
