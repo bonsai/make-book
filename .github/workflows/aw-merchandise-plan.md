@@ -22,7 +22,7 @@ Act as an Operations Research agent for `bonsai/make-book`.
 
 Solve this problem:
 
-> A book is sold for 400 yen. How many copies should be sold to generate profit after shipping and selling/administrative expenses?
+> Each sold copy has a **400-yen gross difference (差益)** before shipping and selling/administrative expenses. How many copies should be sold, and under what cost structure, to generate profit?
 
 Do not assume that "more sales is always better." Model the cost structure and identify the economically meaningful sales quantity or range.
 
@@ -30,8 +30,9 @@ Do not assume that "more sales is always better." Model the cost structure and i
 
 Define:
 
-- selling price per copy
-- printing / procurement cost per copy
+- gross difference per copy: 400 yen
+- selling price per copy (if needed for fee calculation)
+- printing / procurement cost per copy (already reflected in the 400-yen difference unless explicitly stated otherwise)
 - shipping cost per copy
 - payment / platform fee per copy
 - variable selling expense per copy
@@ -41,7 +42,7 @@ Define:
 
 Calculate:
 
-- contribution margin per copy
+- contribution margin per copy = 400 yen − variable shipping/selling expenses
 - break-even quantity
 - quantity needed for target profit
 - total cost and profit at 1, 10, 50, 100, 200, 500, and 1,000 copies
@@ -74,7 +75,7 @@ Distinguish:
 - capacity-constrained optimum
 - unconstrained case where profit increases with every additional sale
 
-The agent must not claim a finite "optimal number of copies" unless a real constraint, demand curve, capacity limit, or diminishing-margin condition makes such an optimum mathematically meaningful.
+The agent must not claim a finite "optimal number of copies" unless a real constraint, demand curve, capacity limit, or diminishing-margin condition makes such an optimum mathematically meaningful. If the 400-yen difference remains positive after variable costs, calculate break-even and target-profit quantities; state that profit continues to increase with additional sales when no upper constraint exists.
 
 ### Output
 
